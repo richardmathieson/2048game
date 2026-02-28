@@ -12,401 +12,317 @@
     --cell: #1f1a2e;
     --text: #eee8e0;
     --gold: #d4a63a;
-    --gold-glow: rgba(212,166,58,0.25);
-    --blood: #8b2020;
-    --culture: #6d5acd;
-    --military: #c44;
-    --economy: #d4a63a;
-    --faith: #5ba0d4;
     --tile-radius: 14px;
     --gap: 8px;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-
+  *{margin:0;padding:0;box-sizing:border-box;}
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100dvh;
-    overflow-x: hidden;
-    touch-action: none;
-    user-select: none;
+    background:var(--bg); color:var(--text);
+    font-family:'Outfit',sans-serif;
+    display:flex; justify-content:center; align-items:flex-start;
+    min-height:100dvh; overflow-x:hidden;
+    touch-action:none; user-select:none;
   }
-
   body::before {
-    content:'';
-    position:fixed; inset:0;
+    content:''; position:fixed; inset:0;
     background:
       radial-gradient(ellipse at 30% 20%, rgba(212,166,58,0.04) 0%, transparent 50%),
       radial-gradient(ellipse at 70% 80%, rgba(139,32,32,0.05) 0%, transparent 50%),
       radial-gradient(ellipse at 50% 50%, rgba(109,90,205,0.03) 0%, transparent 60%);
     pointer-events:none; z-index:0;
-    animation: bgPulse 15s ease-in-out infinite alternate;
   }
-  @keyframes bgPulse {
-    0% { opacity:0.8; } 100% { opacity:1.2; }
-  }
-
   .app {
     position:relative; z-index:1;
     display:flex; flex-direction:column; align-items:center;
-    gap:12px; padding:12px;
-    width:100%; max-width:520px;
+    gap:12px; padding:12px; width:100%; max-width:520px;
   }
 
-  /* ─── HEADER ─── */
-  .header {
-    display:flex; justify-content:space-between; align-items:center;
-    width:100%; gap: 10px;
-  }
-  .title-block {
-    display:flex; flex-direction:column;
-  }
+  /* HEADER */
+  .header { display:flex; justify-content:space-between; align-items:center; width:100%; gap:10px; }
+  .title-block { display:flex; flex-direction:column; }
   .title {
-    font-family:'Cinzel', serif;
-    font-size:1.5rem; font-weight:900;
-    background: linear-gradient(135deg, var(--gold), #f0d060, var(--gold));
+    font-family:'Cinzel',serif; font-size:1.5rem; font-weight:900;
+    background:linear-gradient(135deg,var(--gold),#f0d060,var(--gold));
     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    filter: drop-shadow(0 0 12px rgba(212,166,58,0.4));
-    line-height:1.1;
+    filter:drop-shadow(0 0 12px rgba(212,166,58,0.4)); line-height:1.1;
   }
   .era-label {
-    font-size:0.65rem; letter-spacing:3px; text-transform:uppercase;
-    color: rgba(255,255,255,0.35); font-weight:600; margin-top:2px;
+    font-size:0.6rem; letter-spacing:3px; text-transform:uppercase;
+    color:rgba(255,255,255,0.35); font-weight:600; margin-top:2px;
+    transition: all 0.5s ease;
   }
-  .scores {
-    display:flex; gap:8px;
-  }
+  .scores { display:flex; gap:8px; }
   .score-box {
-    background: rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.06);
-    border-radius:10px; padding:6px 14px;
-    text-align:center; min-width:70px;
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
+    border-radius:10px; padding:6px 14px; text-align:center; min-width:70px;
   }
   .score-box .label {
-    font-size:0.55rem; text-transform:uppercase;
-    letter-spacing:2px; color:rgba(255,255,255,0.3); font-weight:600;
-  }
-  .score-box .value {
-    font-family:'Space Mono',monospace;
-    font-size:1.1rem; font-weight:700; color:var(--gold);
-  }
-  .score-pop { animation: sBump 0.3s cubic-bezier(.34,1.56,.64,1); }
-  @keyframes sBump { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
-
-  /* ─── EMPIRE STATS BAR ─── */
-  .empire-stats {
-    width:100%;
-    display:flex; gap:6px;
-    background: rgba(255,255,255,0.02);
-    border:1px solid rgba(255,255,255,0.04);
-    border-radius:12px; padding:8px 12px;
-  }
-  .stat {
-    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
-  }
-  .stat-icon { font-size:1rem; }
-  .stat-bar-bg {
-    width:100%; height:4px; background:rgba(255,255,255,0.06);
-    border-radius:2px; overflow:hidden;
-  }
-  .stat-bar-fill {
-    height:100%; border-radius:2px;
-    transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
-  }
-  .stat-label {
-    font-size:0.5rem; text-transform:uppercase; letter-spacing:1px;
+    font-size:0.55rem; text-transform:uppercase; letter-spacing:2px;
     color:rgba(255,255,255,0.3); font-weight:600;
   }
-  .stat-val {
-    font-family:'Space Mono',monospace;
-    font-size:0.65rem; font-weight:700;
-  }
-  .stat.military .stat-bar-fill { background: linear-gradient(90deg, #c44, #e66); }
-  .stat.military .stat-val { color:#e66; }
-  .stat.economy .stat-bar-fill { background: linear-gradient(90deg, #d4a63a, #f0d060); }
-  .stat.economy .stat-val { color:#f0d060; }
-  .stat.culture .stat-bar-fill { background: linear-gradient(90deg, #6d5acd, #a78bfa); }
-  .stat.culture .stat-val { color:#a78bfa; }
-  .stat.faith .stat-bar-fill { background: linear-gradient(90deg, #5ba0d4, #7dd3fc); }
-  .stat.faith .stat-val { color:#7dd3fc; }
+  .score-box .value { font-family:'Space Mono',monospace; font-size:1.1rem; font-weight:700; color:var(--gold); }
+  .score-pop { animation:sBump .3s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes sBump{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 
-  /* ─── BOARD ─── */
+  /* STATS BAR */
+  .empire-stats {
+    width:100%; display:flex; gap:6px;
+    background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);
+    border-radius:12px; padding:8px 12px;
+  }
+  .stat { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .stat-icon { font-size:1rem; }
+  .stat-bar-bg { width:100%; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+  .stat-bar-fill { height:100%; border-radius:2px; transition:width .6s cubic-bezier(.34,1.56,.64,1); }
+  .stat-val { font-family:'Space Mono',monospace; font-size:.65rem; font-weight:700; }
+  .stat.military .stat-bar-fill{background:linear-gradient(90deg,#c44,#e66)}.stat.military .stat-val{color:#e66}
+  .stat.economy .stat-bar-fill{background:linear-gradient(90deg,#d4a63a,#f0d060)}.stat.economy .stat-val{color:#f0d060}
+  .stat.culture .stat-bar-fill{background:linear-gradient(90deg,#6d5acd,#a78bfa)}.stat.culture .stat-val{color:#a78bfa}
+  .stat.faith .stat-bar-fill{background:linear-gradient(90deg,#5ba0d4,#7dd3fc)}.stat.faith .stat-val{color:#7dd3fc}
+
+  /* BOARD */
   .board-wrapper { position:relative; width:100%; aspect-ratio:1; }
   .board {
-    width:100%; height:100%;
-    background: var(--board);
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,0.05);
-    padding:var(--gap);
-    display:grid; grid-template:repeat(4,1fr)/repeat(4,1fr);
-    gap:var(--gap);
-    box-shadow:0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
-    position:relative;
+    width:100%; height:100%; background:var(--board); border-radius:18px;
+    border:1px solid rgba(255,255,255,0.05); padding:var(--gap);
+    display:grid; grid-template:repeat(4,1fr)/repeat(4,1fr); gap:var(--gap);
+    box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04);
+    position:relative; transition:transform 0.08s ease;
   }
-  .cell {
-    background:var(--cell); border-radius:var(--tile-radius);
-    border:1px solid rgba(255,255,255,0.02);
+  .board.shake { animation:boardShake .35s ease; }
+  @keyframes boardShake {
+    0%,100%{transform:translate(0,0) rotate(0)}
+    15%{transform:translate(-3px,1px) rotate(-0.3deg)}
+    30%{transform:translate(3px,-1px) rotate(0.3deg)}
+    45%{transform:translate(-2px,2px) rotate(-0.2deg)}
+    60%{transform:translate(2px,-1px) rotate(0.2deg)}
+    75%{transform:translate(-1px,1px) rotate(-0.1deg)}
   }
-  .tile-layer {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    padding:var(--gap); pointer-events:none;
+  .board.big-shake { animation:bigShake .5s ease; }
+  @keyframes bigShake {
+    0%,100%{transform:translate(0,0) rotate(0)}
+    10%{transform:translate(-5px,2px) rotate(-0.5deg)}
+    20%{transform:translate(5px,-3px) rotate(0.5deg)}
+    30%{transform:translate(-4px,3px) rotate(-0.4deg)}
+    40%{transform:translate(4px,-2px) rotate(0.4deg)}
+    50%{transform:translate(-3px,2px) rotate(-0.3deg)}
+    60%{transform:translate(3px,-1px) rotate(0.3deg)}
+    70%{transform:translate(-2px,1px) rotate(-0.2deg)}
+    80%{transform:translate(1px,-1px) rotate(0.1deg)}
   }
+  .cell { background:var(--cell); border-radius:var(--tile-radius); border:1px solid rgba(255,255,255,.02); }
+  .tile-layer { position:absolute; top:0; left:0; width:100%; height:100%; padding:var(--gap); pointer-events:none; }
+
+  /* PARTICLES */
+  .particle-layer { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; border-radius:18px; z-index:20; }
+  .particle {
+    position:absolute; border-radius:50%; pointer-events:none;
+    animation:particleFly var(--dur) cubic-bezier(.2,.8,.3,1) forwards;
+  }
+  @keyframes particleFly {
+    0%{opacity:1;transform:translate(0,0) scale(1)}
+    100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}
+  }
+
+  /* FLASH */
+  .board-flash {
+    position:absolute; inset:0; border-radius:18px;
+    pointer-events:none; z-index:15; opacity:0;
+  }
+  .board-flash.fire { animation:flashFire .4s ease-out; }
+  .board-flash.golden { animation:flashGold .6s ease-out; }
+  .board-flash.epic { animation:flashEpic .8s ease-out; }
+  @keyframes flashFire { 0%{opacity:.3;background:radial-gradient(circle,rgba(255,100,50,.4),transparent 70%)} 100%{opacity:0} }
+  @keyframes flashGold { 0%{opacity:.4;background:radial-gradient(circle,rgba(212,166,58,.5),transparent 70%)} 100%{opacity:0} }
+  @keyframes flashEpic { 0%{opacity:.5;background:radial-gradient(circle,rgba(160,120,255,.5),rgba(255,200,50,.2),transparent 70%)} 100%{opacity:0} }
+
+  /* TILES */
   .tile {
-    position:absolute;
-    display:flex; flex-direction:column;
+    position:absolute; display:flex; flex-direction:column;
     align-items:center; justify-content:center;
     border-radius:var(--tile-radius);
     font-family:'Space Mono',monospace; font-weight:700;
-    transition: top 0.14s ease, left 0.14s ease;
-    z-index:2; will-change:transform,top,left;
-    line-height:1.1;
+    transition:top .14s ease, left .14s ease;
+    z-index:2; will-change:transform,top,left; line-height:1.1;
   }
   .tile .tile-name {
-    font-family:'Cinzel',serif;
-    font-size:0.45rem; font-weight:600;
-    letter-spacing:1px; text-transform:uppercase;
-    opacity:0.7; margin-top:1px;
+    font-family:'Cinzel',serif; font-size:.45rem; font-weight:600;
+    letter-spacing:1px; text-transform:uppercase; opacity:.7; margin-top:1px;
   }
-  .tile.new { animation: tAppear 0.25s cubic-bezier(.34,1.56,.64,1); }
-  .tile.merged { animation: tMerge 0.3s cubic-bezier(.34,1.56,.64,1); z-index:3; }
-  @keyframes tAppear { 0%{transform:scale(0);opacity:0} 100%{transform:scale(1);opacity:1} }
-  @keyframes tMerge { 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+  .tile.new { animation:tAppear .25s cubic-bezier(.34,1.56,.64,1); }
+  .tile.merged { animation:tMerge .35s cubic-bezier(.34,1.56,.64,1); z-index:3; }
+  @keyframes tAppear{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes tMerge{0%{transform:scale(1)}30%{transform:scale(1.3)}100%{transform:scale(1)}}
 
-  /* Tile styles by era */
-  .tile[data-value="2"] {
-    background: linear-gradient(145deg, #2a2540, #332e4d);
-    color:#9090b0; font-size:1.5rem;
-    border:1px solid rgba(255,255,255,0.06);
+  .tile[data-value="2"]{background:linear-gradient(145deg,#2a2540,#332e4d);color:#9090b0;font-size:1.5rem;border:1px solid rgba(255,255,255,.06)}
+  .tile[data-value="4"]{background:linear-gradient(145deg,#33304d,#3d3960);color:#a8a8c8;font-size:1.5rem;border:1px solid rgba(255,255,255,.07)}
+  .tile[data-value="8"]{background:linear-gradient(145deg,#5a4020,#7a5a2a);color:#f0d080;font-size:1.5rem;box-shadow:0 3px 15px rgba(122,90,42,.3);border:1px solid rgba(240,208,128,.15)}
+  .tile[data-value="16"]{background:linear-gradient(145deg,#704820,#906028);color:#ffe0a0;font-size:1.4rem;box-shadow:0 4px 18px rgba(144,96,40,.35);border:1px solid rgba(255,224,160,.15)}
+  .tile[data-value="32"]{background:linear-gradient(145deg,#8b2020,#a52828);color:#ffd0d0;font-size:1.4rem;box-shadow:0 4px 22px rgba(139,32,32,.5);border:1px solid rgba(255,100,100,.2)}
+  .tile[data-value="64"]{background:linear-gradient(145deg,#1a5a2a,#207030);color:#a0f0b0;font-size:1.4rem;box-shadow:0 5px 25px rgba(32,112,48,.4);border:1px solid rgba(160,240,176,.15)}
+  .tile[data-value="128"]{background:linear-gradient(145deg,#6d5acd,#7d6ae0);color:#fff;font-size:1.2rem;box-shadow:0 6px 30px rgba(109,90,205,.5);border:1px solid rgba(160,140,255,.2)}
+  .tile[data-value="256"]{background:linear-gradient(145deg,#2050a0,#2868c0);color:#c0e0ff;font-size:1.2rem;box-shadow:0 6px 30px rgba(40,104,192,.45);border:1px solid rgba(100,180,255,.2)}
+  .tile[data-value="512"]{background:linear-gradient(145deg,#d4a63a,#e8be48);color:#2a1800;font-size:1.2rem;box-shadow:0 8px 35px rgba(212,166,58,.55);border:1px solid rgba(255,220,100,.3)}
+  .tile[data-value="1024"]{background:linear-gradient(145deg,#b8860b,#daa520);color:#fff;font-size:1rem;box-shadow:0 8px 40px rgba(218,165,32,.5);border:1px solid rgba(255,215,0,.3)}
+  .tile[data-value="2048"]{background:linear-gradient(145deg,#ffd700,#ffe44d);color:#1a0a00;font-size:1rem;box-shadow:0 10px 50px rgba(255,215,0,.6);animation:empireGlow 2s ease-in-out infinite alternate;border:1px solid rgba(255,255,200,.5)}
+  @keyframes empireGlow{from{box-shadow:0 10px 50px rgba(255,215,0,.4)}to{box-shadow:0 10px 70px rgba(255,215,0,.8),0 0 100px rgba(255,215,0,.2)}}
+  .tile[data-value="4096"],.tile[data-value="8192"]{background:linear-gradient(145deg,#ff6b9d,#c084fc);color:#fff;font-size:.9rem;box-shadow:0 10px 50px rgba(236,72,153,.5)}
+
+  /* MERGE TOAST */
+  .merge-toast-container {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; z-index:25; overflow:hidden; border-radius:18px;
   }
-  .tile[data-value="4"] {
-    background: linear-gradient(145deg, #33304d, #3d3960);
-    color:#a8a8c8; font-size:1.5rem;
-    border:1px solid rgba(255,255,255,0.07);
+  .merge-toast {
+    position:absolute; transform:translate(-50%,-50%);
+    pointer-events:none; text-align:center;
+    animation:toastUp 1.8s cubic-bezier(.2,.8,.3,1) forwards;
+    z-index:25;
   }
-  .tile[data-value="8"] {
-    background: linear-gradient(145deg, #5a4020, #7a5a2a);
-    color:#f0d080; font-size:1.5rem;
-    box-shadow:0 3px 15px rgba(122,90,42,0.3);
-    border:1px solid rgba(240,208,128,0.15);
+  .merge-toast .toast-text {
+    font-family:'Cinzel',serif; font-weight:700;
+    text-shadow:0 2px 10px rgba(0,0,0,.8);
+    white-space:nowrap;
   }
-  .tile[data-value="16"] {
-    background: linear-gradient(145deg, #704820, #906028);
-    color:#ffe0a0; font-size:1.4rem;
-    box-shadow:0 4px 18px rgba(144,96,40,0.35);
-    border:1px solid rgba(255,224,160,0.15);
-  }
-  .tile[data-value="32"] {
-    background: linear-gradient(145deg, #8b2020, #a52828);
-    color:#ffd0d0; font-size:1.4rem;
-    box-shadow:0 4px 22px rgba(139,32,32,0.5);
-    border:1px solid rgba(255,100,100,0.2);
-  }
-  .tile[data-value="64"] {
-    background: linear-gradient(145deg, #1a5a2a, #207030);
-    color:#a0f0b0; font-size:1.4rem;
-    box-shadow:0 5px 25px rgba(32,112,48,0.4);
-    border:1px solid rgba(160,240,176,0.15);
-  }
-  .tile[data-value="128"] {
-    background: linear-gradient(145deg, #6d5acd, #7d6ae0);
-    color:#fff; font-size:1.2rem;
-    box-shadow:0 6px 30px rgba(109,90,205,0.5);
-    border:1px solid rgba(160,140,255,0.2);
-  }
-  .tile[data-value="256"] {
-    background: linear-gradient(145deg, #2050a0, #2868c0);
-    color:#c0e0ff; font-size:1.2rem;
-    box-shadow:0 6px 30px rgba(40,104,192,0.45);
-    border:1px solid rgba(100,180,255,0.2);
-  }
-  .tile[data-value="512"] {
-    background: linear-gradient(145deg, #d4a63a, #e8be48);
-    color:#2a1800; font-size:1.2rem;
-    box-shadow:0 8px 35px rgba(212,166,58,0.55);
-    border:1px solid rgba(255,220,100,0.3);
-  }
-  .tile[data-value="1024"] {
-    background: linear-gradient(145deg, #b8860b, #daa520);
-    color:#fff; font-size:1rem;
-    box-shadow:0 8px 40px rgba(218,165,32,0.5);
-    border:1px solid rgba(255,215,0,0.3);
-  }
-  .tile[data-value="2048"] {
-    background: linear-gradient(145deg, #ffd700, #ffe44d);
-    color:#1a0a00; font-size:1rem;
-    box-shadow:0 10px 50px rgba(255,215,0,0.6);
-    animation: empireGlow 2s ease-in-out infinite alternate;
-    border:1px solid rgba(255,255,200,0.5);
-  }
-  @keyframes empireGlow {
-    from { box-shadow:0 10px 50px rgba(255,215,0,0.4); }
-    to   { box-shadow:0 10px 70px rgba(255,215,0,0.8), 0 0 100px rgba(255,215,0,0.2); }
-  }
-  .tile[data-value="4096"],.tile[data-value="8192"] {
-    background:linear-gradient(145deg,#ff6b9d,#c084fc);
-    color:#fff; font-size:0.9rem;
-    box-shadow:0 10px 50px rgba(236,72,153,0.5);
+  .merge-toast.small .toast-text { font-size:.7rem; color:rgba(255,255,255,.6); }
+  .merge-toast.medium .toast-text { font-size:.85rem; color:#f0d080; }
+  .merge-toast.large .toast-text { font-size:1rem; color:#ffd700; }
+  .merge-toast.epic .toast-text { font-size:1.1rem; color:#fff; text-shadow:0 0 20px rgba(212,166,58,.8); }
+  @keyframes toastUp {
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.5) translateY(10px)}
+    15%{opacity:1;transform:translate(-50%,-50%) scale(1.1) translateY(0)}
+    25%{transform:translate(-50%,-50%) scale(1) translateY(0)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(.8) translateY(-50px)}
   }
 
-  /* ─── CONTROLS ─── */
-  .controls { display:flex; gap:8px; width:100%; }
-  .btn {
-    flex:1; padding:12px;
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.06);
-    color:rgba(255,255,255,0.5);
-    border-radius:12px;
+  /* ERA REVEAL BANNER */
+  .era-reveal {
+    position:absolute; inset:0; z-index:50;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    pointer-events:none; border-radius:18px; overflow:hidden;
+  }
+  .era-reveal-bg {
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at center, rgba(12,10,14,.95), rgba(12,10,14,.8));
+    backdrop-filter:blur(6px);
+    animation:eraFade 3s ease forwards;
+  }
+  @keyframes eraFade { 0%{opacity:0} 10%{opacity:1} 75%{opacity:1} 100%{opacity:0} }
+  .era-reveal-content {
+    position:relative; z-index:2; text-align:center;
+    animation:eraSlide 3s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  @keyframes eraSlide {
+    0%{opacity:0;transform:translateY(30px) scale(.8)}
+    12%{opacity:1;transform:translateY(0) scale(1.05)}
+    20%{transform:translateY(0) scale(1)}
+    75%{opacity:1;transform:translateY(0) scale(1)}
+    100%{opacity:0;transform:translateY(-15px) scale(.95)}
+  }
+  .era-reveal .era-new-label {
+    font-size:.55rem; letter-spacing:4px; text-transform:uppercase;
+    color:var(--gold); font-weight:600; margin-bottom:6px;
     font-family:'Outfit',sans-serif;
-    font-size:0.8rem; font-weight:600;
-    letter-spacing:1px; text-transform:uppercase;
-    cursor:pointer; transition:all 0.2s ease;
   }
-  .btn:hover {
-    background:rgba(255,255,255,0.07);
-    color:var(--gold);
-    border-color:rgba(212,166,58,0.2);
-    transform:translateY(-1px);
+  .era-reveal .era-new-name {
+    font-family:'Cinzel',serif; font-size:1.6rem; font-weight:900;
+    color:#fff; margin-bottom:4px; line-height:1.2;
+  }
+  .era-reveal .era-new-desc {
+    font-size:.75rem; color:rgba(255,255,255,.5);
+    max-width:280px; line-height:1.4;
+  }
+  .era-reveal .era-line {
+    width:60px; height:1px; margin:10px auto;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .era-sparkles { position:absolute; inset:0; z-index:1; overflow:hidden; }
+  .era-sparkle {
+    position:absolute; width:3px; height:3px; border-radius:50%;
+    background:var(--gold);
+    animation:sparkleFloat var(--dur) ease-out forwards;
+  }
+  @keyframes sparkleFloat {
+    0%{opacity:0;transform:translate(0,0) scale(0)}
+    20%{opacity:1;transform:translate(var(--dx1),var(--dy1)) scale(1)}
+    100%{opacity:0;transform:translate(var(--dx2),var(--dy2)) scale(0)}
   }
 
-  /* ─── EVENT LOG ─── */
+  /* CONTROLS */
+  .controls{display:flex;gap:8px;width:100%}
+  .btn {
+    flex:1;padding:12px;
+    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+    color:rgba(255,255,255,.5);border-radius:12px;
+    font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;
+  }
+  .btn:hover{background:rgba(255,255,255,.07);color:var(--gold);border-color:rgba(212,166,58,.2);transform:translateY(-1px)}
+
+  /* EVENT LOG */
   .event-log {
-    width:100%;
-    max-height:80px; overflow-y:auto;
-    display:flex; flex-direction:column; gap:4px;
-    padding: 6px 0;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
+    width:100%;max-height:80px;overflow-y:auto;
+    display:flex;flex-direction:column;gap:4px;padding:6px 0;
+    scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
   }
   .log-entry {
-    font-size:0.65rem; color:rgba(255,255,255,0.35);
-    padding:3px 10px;
-    border-left:2px solid rgba(212,166,58,0.2);
-    animation: logIn 0.3s ease;
-    font-style:italic;
+    font-size:.65rem;color:rgba(255,255,255,.35);padding:3px 10px;
+    border-left:2px solid rgba(212,166,58,.2);animation:logIn .3s ease;font-style:italic;
   }
-  @keyframes logIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes logIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
 
-  /* ─── DECISION MODAL ─── */
+  /* DECISION MODAL */
   .modal-overlay {
-    position:fixed; inset:0; z-index:100;
-    background:rgba(0,0,0,0.8);
-    backdrop-filter:blur(12px);
-    display:flex; align-items:center; justify-content:center;
-    padding:20px;
-    animation: fadeIn 0.4s ease;
+    position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);
+    backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;
+    padding:20px;animation:fadeIn .4s ease;
   }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   .modal {
-    background: linear-gradient(160deg, #1a1528, #12101c);
-    border:1px solid rgba(212,166,58,0.15);
-    border-radius:20px;
-    padding:28px 24px;
-    max-width:440px; width:100%;
-    box-shadow:0 30px 80px rgba(0,0,0,0.8), 0 0 80px rgba(212,166,58,0.08);
-    animation: modalIn 0.5s cubic-bezier(.34,1.56,.64,1);
+    background:linear-gradient(160deg,#1a1528,#12101c);
+    border:1px solid rgba(212,166,58,.15);border-radius:20px;
+    padding:28px 24px;max-width:440px;width:100%;
+    box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 80px rgba(212,166,58,.08);
+    animation:modalIn .5s cubic-bezier(.34,1.56,.64,1);
   }
-  @keyframes modalIn { from{transform:scale(0.85) translateY(20px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
-
-  .modal-era {
-    font-family:'Cinzel',serif;
-    font-size:0.65rem; letter-spacing:3px; text-transform:uppercase;
-    color:var(--gold); font-weight:600; margin-bottom:4px;
-  }
-  .modal-title {
-    font-family:'Cinzel',serif;
-    font-size:1.5rem; font-weight:900;
-    color:var(--text); margin-bottom:10px;
-    line-height:1.2;
-  }
-  .modal-desc {
-    font-size:0.85rem; color:rgba(255,255,255,0.5);
-    line-height:1.6; margin-bottom:20px;
-  }
-  .modal-choices {
-    display:flex; flex-direction:column; gap:10px;
-  }
+  @keyframes modalIn{from{transform:scale(.85) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+  .modal-era{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:4px}
+  .modal-title{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:10px;line-height:1.2}
+  .modal-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:20px}
+  .modal-choices{display:flex;flex-direction:column;gap:10px}
   .choice-btn {
-    position:relative;
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:14px;
-    padding:14px 16px;
-    cursor:pointer;
-    text-align:left;
-    transition:all 0.25s ease;
-    overflow:hidden;
+    position:relative;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .25s ease;overflow:hidden;
   }
-  .choice-btn::before {
-    content:'';
-    position:absolute; inset:0;
-    background:linear-gradient(90deg, transparent, rgba(212,166,58,0.05), transparent);
-    opacity:0; transition:opacity 0.3s;
-  }
-  .choice-btn:hover {
-    border-color:rgba(212,166,58,0.3);
-    transform:translateX(4px);
-    background:rgba(255,255,255,0.05);
-  }
-  .choice-btn:hover::before { opacity:1; }
-  .choice-btn .choice-name {
-    font-family:'Cinzel',serif;
-    font-size:0.9rem; font-weight:700;
-    color:var(--text); margin-bottom:4px;
-  }
-  .choice-btn .choice-desc {
-    font-size:0.72rem; color:rgba(255,255,255,0.4);
-    line-height:1.4;
-  }
-  .choice-btn .choice-effects {
-    display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;
-  }
-  .effect-tag {
-    font-size:0.6rem; font-weight:700;
-    padding:2px 8px; border-radius:6px;
-    letter-spacing:0.5px;
-  }
-  .effect-tag.positive { background:rgba(80,200,80,0.12); color:#60e060; }
-  .effect-tag.negative { background:rgba(200,60,60,0.12); color:#e06060; }
-  .effect-tag.neutral  { background:rgba(100,160,255,0.12); color:#80c0ff; }
+  .choice-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,166,58,.05),transparent);opacity:0;transition:opacity .3s}
+  .choice-btn:hover{border-color:rgba(212,166,58,.3);transform:translateX(4px);background:rgba(255,255,255,.05)}
+  .choice-btn:hover::before{opacity:1}
+  .choice-btn .choice-name{font-family:'Cinzel',serif;font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .choice-btn .choice-desc{font-size:.72rem;color:rgba(255,255,255,.4);line-height:1.4}
+  .choice-btn .choice-effects{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .effect-tag{font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:.5px}
+  .effect-tag.positive{background:rgba(80,200,80,.12);color:#60e060}
+  .effect-tag.negative{background:rgba(200,60,60,.12);color:#e06060}
 
-  /* ─── GAME OVER / WIN ─── */
+  /* OVERLAY */
   .overlay {
-    position:absolute; inset:0;
-    background:rgba(12,10,14,0.88);
-    backdrop-filter:blur(8px);
-    border-radius:18px;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    gap:14px; z-index:10;
-    animation:fadeIn 0.5s ease;
+    position:absolute;inset:0;background:rgba(12,10,14,.88);backdrop-filter:blur(8px);
+    border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;z-index:60;animation:fadeIn .5s ease;
   }
-  .overlay h2 {
-    font-family:'Cinzel',serif; font-size:2rem; font-weight:900;
-  }
-  .overlay .go-text { color:#e06060; }
-  .overlay .win-text {
-    background:linear-gradient(135deg, var(--gold), #ff6b6b, #c084fc);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  }
-  .overlay p { color:rgba(255,255,255,0.45); font-size:0.9rem; }
+  .overlay h2{font-family:'Cinzel',serif;font-size:2rem;font-weight:900}
+  .overlay .go-text{color:#e06060}
+  .overlay .win-text{background:linear-gradient(135deg,var(--gold),#ff6b6b,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .overlay p{color:rgba(255,255,255,.45);font-size:.9rem}
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width:480px) {
-    .app { padding:8px; gap:8px; }
-    .title { font-size:1.2rem; }
-    .score-box { padding:4px 10px; min-width:58px; }
-    .score-box .value { font-size:0.9rem; }
-    :root { --gap:6px; --tile-radius:10px; }
-    .tile { font-size:1.2rem !important; }
-    .tile .tile-name { font-size:0.35rem !important; }
-    .modal { padding:20px 16px; }
-    .modal-title { font-size:1.2rem; }
-    .empire-stats { padding: 6px 8px; }
+  @media(max-width:480px){
+    .app{padding:8px;gap:8px}.title{font-size:1.2rem}
+    .score-box{padding:4px 10px;min-width:58px}.score-box .value{font-size:.9rem}
+    :root{--gap:6px;--tile-radius:10px}
+    .tile{font-size:1.2rem!important}.tile .tile-name{font-size:.35rem!important}
+    .modal{padding:20px 16px}.modal-title{font-size:1.2rem}
+    .empire-stats{padding:6px 8px}
+    .era-reveal .era-new-name{font-size:1.3rem}
   }
 </style>
 </head>
@@ -418,437 +334,363 @@
       <div class="era-label" id="eraLabel">The Dawn of Civilization</div>
     </div>
     <div class="scores">
-      <div class="score-box">
-        <div class="label">Score</div>
-        <div class="value" id="score">0</div>
-      </div>
-      <div class="score-box">
-        <div class="label">Year</div>
-        <div class="value" id="year">4000 BC</div>
-      </div>
+      <div class="score-box"><div class="label">Score</div><div class="value" id="score">0</div></div>
+      <div class="score-box"><div class="label">Year</div><div class="value" id="year">4000 BC</div></div>
     </div>
   </div>
-
   <div class="empire-stats">
-    <div class="stat military">
-      <div class="stat-icon">⚔️</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="milBar" style="width:10%"></div></div>
-      <div class="stat-val" id="milVal">10</div>
-    </div>
-    <div class="stat economy">
-      <div class="stat-icon">🪙</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="ecoBar" style="width:10%"></div></div>
-      <div class="stat-val" id="ecoVal">10</div>
-    </div>
-    <div class="stat culture">
-      <div class="stat-icon">🏛️</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="culBar" style="width:10%"></div></div>
-      <div class="stat-val" id="culVal">10</div>
-    </div>
-    <div class="stat faith">
-      <div class="stat-icon">✨</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="faiBar" style="width:10%"></div></div>
-      <div class="stat-val" id="faiVal">10</div>
-    </div>
+    <div class="stat military"><div class="stat-icon">⚔️</div><div class="stat-bar-bg"><div class="stat-bar-fill" id="milBar" style="width:10%"></div></div><div class="stat-val" id="milVal">10</div></div>
+    <div class="stat economy"><div class="stat-icon">🪙</div><div class="stat-bar-bg"><div class="stat-bar-fill" id="ecoBar" style="width:10%"></div></div><div class="stat-val" id="ecoVal">10</div></div>
+    <div class="stat culture"><div class="stat-icon">🏛️</div><div class="stat-bar-bg"><div class="stat-bar-fill" id="culBar" style="width:10%"></div></div><div class="stat-val" id="culVal">10</div></div>
+    <div class="stat faith"><div class="stat-icon">✨</div><div class="stat-bar-bg"><div class="stat-bar-fill" id="faiBar" style="width:10%"></div></div><div class="stat-val" id="faiVal">10</div></div>
   </div>
-
   <div class="board-wrapper">
     <div class="board" id="board"></div>
     <div class="tile-layer" id="tileLayer"></div>
+    <div class="particle-layer" id="particleLayer"></div>
+    <div class="board-flash" id="boardFlash"></div>
+    <div class="merge-toast-container" id="toastContainer"></div>
     <div class="overlay" id="overlay" style="display:none"></div>
   </div>
-
   <div class="controls">
     <button class="btn" onclick="newGame()">New Empire</button>
     <button class="btn" onclick="undo()">Undo</button>
   </div>
-
   <div class="event-log" id="eventLog"></div>
 </div>
-
 <div class="modal-overlay" id="modalOverlay" style="display:none">
   <div class="modal" id="modal"></div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-//  TILE ERA NAMES
-// ═══════════════════════════════════════════
-const TILE_NAMES = {
-  2:'Camp', 4:'Village', 8:'Town', 16:'City',
-  32:'Kingdom', 64:'Republic', 128:'Empire',
-  256:'Dynasty', 512:'Dominion', 1024:'Hegemony',
-  2048:'Eternal Empire', 4096:'Ascension', 8192:'Myth'
-};
-const ERA_NAMES = {
-  2:'The Dawn of Civilization', 4:'The Age of Settlements', 8:'The Bronze Age',
-  16:'The Iron Age', 32:'The Age of Kingdoms', 64:'The Classical Era',
-  128:'The Imperial Age', 256:'The Golden Age', 512:'The Age of Exploration',
-  1024:'The Age of Industry', 2048:'The Modern Era'
-};
-const YEAR_MAP = {
-  2:'4000 BC', 4:'3000 BC', 8:'2000 BC', 16:'800 BC', 32:'400 BC',
-  64:'100 AD', 128:'500 AD', 256:'1100 AD', 512:'1500 AD',
-  1024:'1800 AD', 2048:'2048 AD'
+const SIZE=4;
+let grid,score,prevState=null,gameOverFlag=false,wonFlag=false,continueAfterWin=false;
+let tileId=0,tileObjs={};
+let stats={military:10,economy:10,culture:10,faith:10};
+let triggeredEvents=new Set();
+let triggeredEras=new Set();
+let moveLocked=false,highestTile=2;
+
+const TILE_NAMES={2:'Camp',4:'Village',8:'Town',16:'City',32:'Kingdom',64:'Republic',128:'Empire',256:'Dynasty',512:'Dominion',1024:'Hegemony',2048:'Eternal Empire',4096:'Ascension',8192:'Myth'};
+const ERA_NAMES={2:'The Dawn of Civilization',4:'The Age of Settlements',8:'The Bronze Age',16:'The Iron Age',32:'The Age of Kingdoms',64:'The Classical Era',128:'The Imperial Age',256:'The Golden Age',512:'The Age of Exploration',1024:'The Age of Industry',2048:'The Modern Era'};
+const YEAR_MAP={2:'4000 BC',4:'3000 BC',8:'2000 BC',16:'800 BC',32:'400 BC',64:'100 AD',128:'500 AD',256:'1100 AD',512:'1500 AD',1024:'1800 AD',2048:'2048 AD'};
+const ERA_DESCS={
+  8:'Bronze tools reshape the land. A new power rises.',
+  16:'Iron forges the weapons of war and the plows of peace.',
+  32:'The scattered tribes kneel before a single banner.',
+  64:'Law, philosophy, and the republic are born.',
+  128:'Legions march under imperial eagles.',
+  256:'Art, wealth, and wisdom flourish across the realm.',
+  512:'Ships vanish beyond the horizon, seeking new worlds.',
+  1024:'Steam and steel remake civilization itself.',
+  2048:'You have achieved what no empire ever could — eternity.'
 };
 
-// ═══════════════════════════════════════════
-//  STRATEGIC EVENTS
-// ═══════════════════════════════════════════
-const EVENTS = {
-  16: {
-    title: 'The First Walls',
-    desc: 'Your growing city attracts attention — both traders and raiders. Your council demands a decision on how to protect the people.',
-    choices: [
-      { name:'Build Great Walls', desc:'Fortify the city with massive stone walls. Safety comes at a cost.', effects:{military:15, economy:-5}, effectTags:[{t:'⚔️ Military +15',c:'positive'},{t:'🪙 Economy -5',c:'negative'}], log:'Built great walls around the city.' },
-      { name:'Hire Mercenaries', desc:'Pay foreign warriors to patrol your lands. Quick but unreliable.', effects:{military:10, economy:-10, culture:5}, effectTags:[{t:'⚔️ +10',c:'positive'},{t:'🪙 -10',c:'negative'},{t:'🏛️ +5',c:'positive'}], log:'Hired mercenary forces.' },
-      { name:'Open the Gates', desc:'Welcome all — traders, scholars, refugees. Prosperity through openness.', effects:{economy:15, culture:10, military:-5}, effectTags:[{t:'🪙 +15',c:'positive'},{t:'🏛️ +10',c:'positive'},{t:'⚔️ -5',c:'negative'}], log:'Opened the gates to all peoples.' },
-    ]
-  },
-  32: {
-    title: 'A Crown of Iron',
-    desc: 'The tribal chiefs gather. They speak of unity under one ruler. But who shall lead — and how?',
-    choices: [
-      { name:'Seize the Crown', desc:'Declare yourself sovereign by force. Crush dissent swiftly.', effects:{military:20, faith:-10, culture:-5}, effectTags:[{t:'⚔️ +20',c:'positive'},{t:'✨ -10',c:'negative'},{t:'🏛️ -5',c:'negative'}], log:'Seized the crown by force. The Kingdom rises.', bonus:'score', bonusAmt:50 },
-      { name:'Council of Elders', desc:'Form a council where chiefs share power. Slower, but stable.', effects:{culture:15, faith:10, economy:5}, effectTags:[{t:'🏛️ +15',c:'positive'},{t:'✨ +10',c:'positive'},{t:'🪙 +5',c:'positive'}], log:'Formed a Council of Elders.' },
-      { name:'Divine Right', desc:'Claim the gods have chosen you. The priests back your claim.', effects:{faith:25, military:5, culture:-10}, effectTags:[{t:'✨ +25',c:'positive'},{t:'⚔️ +5',c:'positive'},{t:'🏛️ -10',c:'negative'}], log:'Claimed divine right to rule.' },
-    ]
-  },
-  64: {
-    title: 'The Great Library',
-    desc: 'Scholars propose building a center of knowledge. But your generals want a fortress, and merchants want a grand market.',
-    choices: [
-      { name:'Build the Library', desc:'Invest in knowledge. Scholars flock from distant lands.', effects:{culture:25, faith:10, military:-5}, effectTags:[{t:'🏛️ +25',c:'positive'},{t:'✨ +10',c:'positive'},{t:'⚔️ -5',c:'negative'}], log:'Built the Great Library.', bonus:'score', bonusAmt:100 },
-      { name:'Build the Fortress', desc:'An impenetrable citadel. Your enemies will tremble.', effects:{military:25, economy:-10}, effectTags:[{t:'⚔️ +25',c:'positive'},{t:'🪙 -10',c:'negative'}], log:'Built an impenetrable Fortress.' },
-      { name:'Build the Grand Market', desc:'A hub of commerce connecting trade routes across the known world.', effects:{economy:25, culture:5}, effectTags:[{t:'🪙 +25',c:'positive'},{t:'🏛️ +5',c:'positive'}], log:'Built the Grand Market.' },
-    ]
-  },
-  128: {
-    title: 'Imperial Expansion',
-    desc: 'Your borders stretch far, but neighboring lands remain unconquered. The senate debates the path forward.',
-    choices: [
-      { name:'Military Conquest', desc:'Send legions to conquer. The empire must grow through strength.', effects:{military:20, economy:10, culture:-15, faith:-10}, effectTags:[{t:'⚔️ +20',c:'positive'},{t:'🪙 +10',c:'positive'},{t:'🏛️ -15',c:'negative'},{t:'✨ -10',c:'negative'}], log:'Legions march. The Empire expands by the sword.', bonus:'score', bonusAmt:200 },
-      { name:'Diplomatic Marriages', desc:'Unite through alliances and royal marriages. Slow but bloodless.', effects:{culture:20, faith:10, economy:10}, effectTags:[{t:'🏛️ +20',c:'positive'},{t:'✨ +10',c:'positive'},{t:'🪙 +10',c:'positive'}], log:'United kingdoms through royal marriages.' },
-      { name:'Cultural Assimilation', desc:'Spread your language, art, and customs. Let them join willingly.', effects:{culture:30, faith:15, military:-10}, effectTags:[{t:'🏛️ +30',c:'positive'},{t:'✨ +15',c:'positive'},{t:'⚔️ -10',c:'negative'}], log:'Spread culture across the known world.' },
-    ]
-  },
-  256: {
-    title: 'The Golden Age',
-    desc: 'Your dynasty enters an unprecedented era of prosperity. But with great wealth comes great temptation.',
-    choices: [
-      { name:'Patron of the Arts', desc:'Fund artists, poets, and architects. Build monuments to eternity.', effects:{culture:30, economy:-15, faith:10}, effectTags:[{t:'🏛️ +30',c:'positive'},{t:'🪙 -15',c:'negative'},{t:'✨ +10',c:'positive'}], log:'Ushered in a Renaissance of art and beauty.', bonus:'score', bonusAmt:300 },
-      { name:'Expand the Treasury', desc:'Hoard gold. Tax the provinces. Build reserves for uncertain times.', effects:{economy:30, culture:-10, faith:-10}, effectTags:[{t:'🪙 +30',c:'positive'},{t:'🏛️ -10',c:'negative'},{t:'✨ -10',c:'negative'}], log:'Filled the treasury to overflowing.' },
-      { name:'Reform the Laws', desc:'Codify justice. Equal treatment under law. The people rejoice.', effects:{faith:20, culture:15, military:5, economy:5}, effectTags:[{t:'✨ +20',c:'positive'},{t:'🏛️ +15',c:'positive'},{t:'⚔️ +5',c:'positive'},{t:'🪙 +5',c:'positive'}], log:'Reformed the legal code. Justice prevails.' },
-    ]
-  },
-  512: {
-    title: 'Across the Horizon',
-    desc: 'Your navigators have found new continents. The world is far larger than anyone imagined.',
-    choices: [
-      { name:'Colonize', desc:'Plant your flag. Claim the new world for the empire.', effects:{economy:25, military:15, culture:-20, faith:-15}, effectTags:[{t:'🪙 +25',c:'positive'},{t:'⚔️ +15',c:'positive'},{t:'🏛️ -20',c:'negative'},{t:'✨ -15',c:'negative'}], log:'Colonized distant shores.', bonus:'score', bonusAmt:500 },
-      { name:'Trade Expeditions', desc:'Establish peaceful trade. Spices, silk, and gold flow both ways.', effects:{economy:30, culture:15, faith:5}, effectTags:[{t:'🪙 +30',c:'positive'},{t:'🏛️ +15',c:'positive'},{t:'✨ +5',c:'positive'}], log:'Opened trade routes across the oceans.' },
-      { name:'Scientific Voyages', desc:'Map the world. Study nature. Advance human knowledge.', effects:{culture:30, faith:20, economy:5}, effectTags:[{t:'🏛️ +30',c:'positive'},{t:'✨ +20',c:'positive'},{t:'🪙 +5',c:'positive'}], log:'Launched scientific expeditions across the globe.' },
-    ]
-  },
-  1024: {
-    title: 'The Industrial Revolution',
-    desc: 'Steam and steel transform everything. Factories rise, but so does unrest among the workers.',
-    choices: [
-      { name:'Full Industrialization', desc:'Maximize production. Progress demands sacrifice.', effects:{economy:35, military:20, culture:-20, faith:-25}, effectTags:[{t:'🪙 +35',c:'positive'},{t:'⚔️ +20',c:'positive'},{t:'🏛️ -20',c:'negative'},{t:'✨ -25',c:'negative'}], log:'Industrialized at all costs. Smokestacks fill the sky.', bonus:'score', bonusAmt:800 },
-      { name:"Workers' Rights", desc:'Establish unions. Protect the people who fuel your economy.', effects:{faith:25, culture:20, economy:10}, effectTags:[{t:'✨ +25',c:'positive'},{t:'🏛️ +20',c:'positive'},{t:'🪙 +10',c:'positive'}], log:"Established workers' rights and protections." },
-      { name:'Green Innovation', desc:'Pursue sustainable technology. Harness nature, not exploit it.', effects:{culture:25, faith:25, economy:5, military:-5}, effectTags:[{t:'🏛️ +25',c:'positive'},{t:'✨ +25',c:'positive'},{t:'🪙 +5',c:'positive'},{t:'⚔️ -5',c:'negative'}], log:'Pioneered sustainable industry.' },
-    ]
-  }
+const MERGE_FLAVORS = {
+  4:  ['Settlers unite','Huts cluster together','Smoke rises from hearths'],
+  8:  ['A village grows','Walls of mud and wood','The first market opens'],
+  16: ['Streets are paved','A town bell rings','Craftsmen gather'],
+  32: ['Banners are raised','Blood and iron','A crown is forged'],
+  64: ['Laws are written','The senate convenes','Citizens debate freedom'],
+  128:['Legions form','The empire expands','Monuments rise'],
+  256:['Scribes record history','Gold fills the coffers','A dynasty endures'],
+  512:['Sails catch the wind','New lands discovered','Maps are redrawn'],
+  1024:['Factories roar to life','Rails span the continent','Progress accelerates'],
+  2048:['Eternity achieved','The eternal empire','History remembers'],
 };
 
-// ═══════════════════════════════════════════
-//  GAME STATE
-// ═══════════════════════════════════════════
-const SIZE = 4;
-let grid, score, prevState = null, gameOverFlag = false, wonFlag = false, continueAfterWin = false;
-let tileId = 0, tileObjs = {};
-let stats = { military:10, economy:10, culture:10, faith:10 };
-let triggeredEvents = new Set();
-let moveLocked = false;
-let highestTile = 2;
+const MERGE_COLORS={2:'150,140,180',4:'170,160,200',8:'240,208,128',16:'255,224,160',32:'255,120,120',64:'160,240,176',128:'160,140,255',256:'100,180,255',512:'255,220,100',1024:'255,215,0',2048:'255,230,100'};
 
-const boardEl = document.getElementById('board');
-const tileLayerEl = document.getElementById('tileLayer');
-const scoreEl = document.getElementById('score');
-const yearEl = document.getElementById('year');
-const eraLabelEl = document.getElementById('eraLabel');
-const overlayEl = document.getElementById('overlay');
-const modalOverlay = document.getElementById('modalOverlay');
-const modalEl = document.getElementById('modal');
-const eventLogEl = document.getElementById('eventLog');
+// ═══════ STRATEGIC EVENTS ═══════
+const EVENTS={
+  16:{title:'The First Walls',desc:'Your growing city attracts traders and raiders alike. Your council demands a decision.',choices:[
+    {name:'Build Great Walls',desc:'Fortify the city with massive stone walls.',effects:{military:15,economy:-5},effectTags:[{t:'⚔️ Military +15',c:'positive'},{t:'🪙 Economy -5',c:'negative'}],log:'Built great walls around the city.'},
+    {name:'Hire Mercenaries',desc:'Pay foreign warriors to patrol your lands.',effects:{military:10,economy:-10,culture:5},effectTags:[{t:'⚔️ +10',c:'positive'},{t:'🪙 -10',c:'negative'},{t:'🏛️ +5',c:'positive'}],log:'Hired mercenary forces.'},
+    {name:'Open the Gates',desc:'Welcome all — traders, scholars, refugees.',effects:{economy:15,culture:10,military:-5},effectTags:[{t:'🪙 +15',c:'positive'},{t:'🏛️ +10',c:'positive'},{t:'⚔️ -5',c:'negative'}],log:'Opened the gates to all peoples.'},
+  ]},
+  32:{title:'A Crown of Iron',desc:'The tribal chiefs gather. They speak of unity under one ruler.',choices:[
+    {name:'Seize the Crown',desc:'Declare yourself sovereign by force.',effects:{military:20,faith:-10,culture:-5},effectTags:[{t:'⚔️ +20',c:'positive'},{t:'✨ -10',c:'negative'},{t:'🏛️ -5',c:'negative'}],log:'Seized the crown by force.',bonus:'score',bonusAmt:50},
+    {name:'Council of Elders',desc:'Form a council where chiefs share power.',effects:{culture:15,faith:10,economy:5},effectTags:[{t:'🏛️ +15',c:'positive'},{t:'✨ +10',c:'positive'},{t:'🪙 +5',c:'positive'}],log:'Formed a Council of Elders.'},
+    {name:'Divine Right',desc:'Claim the gods have chosen you.',effects:{faith:25,military:5,culture:-10},effectTags:[{t:'✨ +25',c:'positive'},{t:'⚔️ +5',c:'positive'},{t:'🏛️ -10',c:'negative'}],log:'Claimed divine right to rule.'},
+  ]},
+  64:{title:'The Great Library',desc:'Scholars propose a center of knowledge. Generals want a fortress. Merchants want a grand market.',choices:[
+    {name:'Build the Library',desc:'Invest in knowledge. Scholars flock from distant lands.',effects:{culture:25,faith:10,military:-5},effectTags:[{t:'🏛️ +25',c:'positive'},{t:'✨ +10',c:'positive'},{t:'⚔️ -5',c:'negative'}],log:'Built the Great Library.',bonus:'score',bonusAmt:100},
+    {name:'Build the Fortress',desc:'An impenetrable citadel.',effects:{military:25,economy:-10},effectTags:[{t:'⚔️ +25',c:'positive'},{t:'🪙 -10',c:'negative'}],log:'Built an impenetrable Fortress.'},
+    {name:'Build the Grand Market',desc:'A hub of commerce connecting trade routes.',effects:{economy:25,culture:5},effectTags:[{t:'🪙 +25',c:'positive'},{t:'🏛️ +5',c:'positive'}],log:'Built the Grand Market.'},
+  ]},
+  128:{title:'Imperial Expansion',desc:'Your borders stretch far, but neighboring lands remain unconquered.',choices:[
+    {name:'Military Conquest',desc:'Send legions to conquer.',effects:{military:20,economy:10,culture:-15,faith:-10},effectTags:[{t:'⚔️ +20',c:'positive'},{t:'🪙 +10',c:'positive'},{t:'🏛️ -15',c:'negative'},{t:'✨ -10',c:'negative'}],log:'Legions march. The Empire expands.',bonus:'score',bonusAmt:200},
+    {name:'Diplomatic Marriages',desc:'Unite through alliances and royal marriages.',effects:{culture:20,faith:10,economy:10},effectTags:[{t:'🏛️ +20',c:'positive'},{t:'✨ +10',c:'positive'},{t:'🪙 +10',c:'positive'}],log:'United kingdoms through royal marriages.'},
+    {name:'Cultural Assimilation',desc:'Spread language, art, and customs.',effects:{culture:30,faith:15,military:-10},effectTags:[{t:'🏛️ +30',c:'positive'},{t:'✨ +15',c:'positive'},{t:'⚔️ -10',c:'negative'}],log:'Spread culture across the known world.'},
+  ]},
+  256:{title:'The Golden Age',desc:'An unprecedented era of prosperity. With great wealth comes great temptation.',choices:[
+    {name:'Patron of the Arts',desc:'Fund artists, poets, and architects.',effects:{culture:30,economy:-15,faith:10},effectTags:[{t:'🏛️ +30',c:'positive'},{t:'🪙 -15',c:'negative'},{t:'✨ +10',c:'positive'}],log:'Ushered in a Renaissance.',bonus:'score',bonusAmt:300},
+    {name:'Expand the Treasury',desc:'Hoard gold. Tax the provinces.',effects:{economy:30,culture:-10,faith:-10},effectTags:[{t:'🪙 +30',c:'positive'},{t:'🏛️ -10',c:'negative'},{t:'✨ -10',c:'negative'}],log:'Filled the treasury to overflowing.'},
+    {name:'Reform the Laws',desc:'Codify justice. Equal treatment under law.',effects:{faith:20,culture:15,military:5,economy:5},effectTags:[{t:'✨ +20',c:'positive'},{t:'🏛️ +15',c:'positive'},{t:'⚔️ +5',c:'positive'},{t:'🪙 +5',c:'positive'}],log:'Reformed the legal code.'},
+  ]},
+  512:{title:'Across the Horizon',desc:'Your navigators have found new continents.',choices:[
+    {name:'Colonize',desc:'Plant your flag in the new world.',effects:{economy:25,military:15,culture:-20,faith:-15},effectTags:[{t:'🪙 +25',c:'positive'},{t:'⚔️ +15',c:'positive'},{t:'🏛️ -20',c:'negative'},{t:'✨ -15',c:'negative'}],log:'Colonized distant shores.',bonus:'score',bonusAmt:500},
+    {name:'Trade Expeditions',desc:'Establish peaceful trade routes.',effects:{economy:30,culture:15,faith:5},effectTags:[{t:'🪙 +30',c:'positive'},{t:'🏛️ +15',c:'positive'},{t:'✨ +5',c:'positive'}],log:'Opened trade routes across the oceans.'},
+    {name:'Scientific Voyages',desc:'Map the world. Advance human knowledge.',effects:{culture:30,faith:20,economy:5},effectTags:[{t:'🏛️ +30',c:'positive'},{t:'✨ +20',c:'positive'},{t:'🪙 +5',c:'positive'}],log:'Launched scientific expeditions.'},
+  ]},
+  1024:{title:'The Industrial Revolution',desc:'Steam and steel transform everything. Factories rise, but so does unrest.',choices:[
+    {name:'Full Industrialization',desc:'Maximize production at any cost.',effects:{economy:35,military:20,culture:-20,faith:-25},effectTags:[{t:'🪙 +35',c:'positive'},{t:'⚔️ +20',c:'positive'},{t:'🏛️ -20',c:'negative'},{t:'✨ -25',c:'negative'}],log:'Industrialized at all costs.',bonus:'score',bonusAmt:800},
+    {name:"Workers' Rights",desc:'Protect the people who fuel your economy.',effects:{faith:25,culture:20,economy:10},effectTags:[{t:'✨ +25',c:'positive'},{t:'🏛️ +20',c:'positive'},{t:'🪙 +10',c:'positive'}],log:"Established workers' rights."},
+    {name:'Green Innovation',desc:'Pursue sustainable technology.',effects:{culture:25,faith:25,economy:5,military:-5},effectTags:[{t:'🏛️ +25',c:'positive'},{t:'✨ +25',c:'positive'},{t:'🪙 +5',c:'positive'},{t:'⚔️ -5',c:'negative'}],log:'Pioneered sustainable industry.'},
+  ]},
+};
+
+// ═══════ DOM ═══════
+const boardEl=document.getElementById('board');
+const tileLayerEl=document.getElementById('tileLayer');
+const particleLayerEl=document.getElementById('particleLayer');
+const flashEl=document.getElementById('boardFlash');
+const toastContainer=document.getElementById('toastContainer');
+const scoreEl=document.getElementById('score');
+const yearEl=document.getElementById('year');
+const eraLabelEl=document.getElementById('eraLabel');
+const overlayEl=document.getElementById('overlay');
+const modalOverlay=document.getElementById('modalOverlay');
+const modalEl=document.getElementById('modal');
+const eventLogEl=document.getElementById('eventLog');
 
 for(let i=0;i<16;i++){const c=document.createElement('div');c.className='cell';boardEl.appendChild(c);}
 
+// ═══════ TILE POSITIONING ═══════
 function getTileSize(){
   const br=boardEl.getBoundingClientRect();
   const g=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'));
-  const ts=(br.width-2*g-(SIZE-1)*g)/SIZE;
-  return{tileSize:ts,gap:g,padding:g};
+  return{tileSize:(br.width-2*g-(SIZE-1)*g)/SIZE,gap:g,padding:g};
 }
 function getTilePos(r,c){const{tileSize:ts,gap:g,padding:p}=getTileSize();return{top:p+r*(ts+g),left:p+c*(ts+g),size:ts};}
-
 function createTileEl(id,val,r,c,isNew){
-  const el=document.createElement('div');
-  el.className='tile'+(isNew?' new':'');
-  el.dataset.value=val;
-  el.id='tile-'+id;
-  const num=document.createElement('span');
-  num.textContent=val;
-  el.appendChild(num);
-  if(TILE_NAMES[val]){
-    const nm=document.createElement('div');
-    nm.className='tile-name';
-    nm.textContent=TILE_NAMES[val];
-    el.appendChild(nm);
-  }
+  const el=document.createElement('div');el.className='tile'+(isNew?' new':'');el.dataset.value=val;el.id='tile-'+id;
+  const num=document.createElement('span');num.textContent=val;el.appendChild(num);
+  if(TILE_NAMES[val]){const nm=document.createElement('div');nm.className='tile-name';nm.textContent=TILE_NAMES[val];el.appendChild(nm);}
+  const pos=getTilePos(r,c);el.style.top=pos.top+'px';el.style.left=pos.left+'px';el.style.width=pos.size+'px';el.style.height=pos.size+'px';
+  tileLayerEl.appendChild(el);return el;
+}
+function updateTilePos(t){const p=getTilePos(t.row,t.col);t.el.style.top=p.top+'px';t.el.style.left=p.left+'px';t.el.style.width=p.size+'px';t.el.style.height=p.size+'px';}
+
+// ═══════ EFFECTS ═══════
+function spawnParticles(r,c,value){
   const pos=getTilePos(r,c);
-  el.style.top=pos.top+'px';el.style.left=pos.left+'px';
-  el.style.width=pos.size+'px';el.style.height=pos.size+'px';
-  tileLayerEl.appendChild(el);
-  return el;
+  const cx=pos.left+pos.size/2;const cy=pos.top+pos.size/2;
+  const color=MERGE_COLORS[value]||'200,200,200';
+  const count=value>=128?20:value>=32?14:8;
+  const spread=value>=128?110:value>=32?80:50;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');p.className='particle';
+    const angle=Math.random()*Math.PI*2;
+    const dist=30+Math.random()*spread;
+    const dx=Math.cos(angle)*dist;const dy=Math.sin(angle)*dist;
+    const size=2+Math.random()*(value>=64?5:3);
+    const dur=0.4+Math.random()*0.6;
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${size}px;height:${size}px;background:rgba(${color},${0.6+Math.random()*0.4});--dx:${dx}px;--dy:${dy}px;--dur:${dur}s;box-shadow:0 0 ${size*2}px rgba(${color},0.5);`;
+    particleLayerEl.appendChild(p);
+    setTimeout(()=>p.remove(),dur*1000+50);
+  }
 }
-function updateTilePos(t){
-  const p=getTilePos(t.row,t.col);
-  t.el.style.top=p.top+'px';t.el.style.left=p.left+'px';
-  t.el.style.width=p.size+'px';t.el.style.height=p.size+'px';
+
+function boardShake(intensity){
+  boardEl.classList.remove('shake','big-shake');void boardEl.offsetWidth;
+  boardEl.classList.add(intensity==='big'?'big-shake':'shake');
+  setTimeout(()=>boardEl.classList.remove('shake','big-shake'),500);
 }
+
+function boardFlash(type){
+  flashEl.classList.remove('fire','golden','epic');void flashEl.offsetWidth;
+  flashEl.classList.add(type);setTimeout(()=>flashEl.classList.remove(type),800);
+}
+
+function showMergeToast(r,c,value){
+  const flavors=MERGE_FLAVORS[value];if(!flavors)return;
+  const text=flavors[Math.floor(Math.random()*flavors.length)];
+  const pos=getTilePos(r,c);
+  const el=document.createElement('div');
+  let sizeClass='small';
+  if(value>=512)sizeClass='epic';else if(value>=128)sizeClass='large';else if(value>=32)sizeClass='medium';
+  el.className='merge-toast '+sizeClass;
+  el.innerHTML=`<div class="toast-text">${text}</div>`;
+  el.style.left=(pos.left+pos.size/2)+'px';el.style.top=(pos.top+pos.size/2)+'px';
+  toastContainer.appendChild(el);
+  setTimeout(()=>el.remove(),2000);
+}
+
+function showEraReveal(value){
+  const name=ERA_NAMES[value];const desc=ERA_DESCS[value];
+  if(!name||!desc)return;
+  const wrap=document.createElement('div');wrap.className='era-reveal';
+  let sparkleHTML='<div class="era-sparkles">';
+  for(let i=0;i<30;i++){
+    const x=Math.random()*100;const y=Math.random()*100;const dur=1+Math.random()*2;
+    const dx1=(Math.random()-0.5)*60;const dy1=(Math.random()-0.5)*60;
+    sparkleHTML+=`<div class="era-sparkle" style="left:${x}%;top:${y}%;--dur:${dur}s;--dx1:${dx1}px;--dy1:${dy1}px;--dx2:${dx1*2}px;--dy2:${dy1*2-40}px;animation-delay:${Math.random()*0.5}s"></div>`;
+  }
+  sparkleHTML+='</div>';
+  wrap.innerHTML=`<div class="era-reveal-bg"></div>${sparkleHTML}<div class="era-reveal-content"><div class="era-new-label">A New Era Dawns</div><div class="era-new-name">${name}</div><div class="era-line"></div><div class="era-new-desc">${desc}</div></div>`;
+  boardEl.parentElement.appendChild(wrap);
+  setTimeout(()=>wrap.remove(),3200);
+}
+
+// ═══════ GAME LOGIC ═══════
 function spawnTile(){
   const empty=[];
   for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(grid[r][c]===0)empty.push([r,c]);
   if(!empty.length)return null;
   const[r,c]=empty[Math.floor(Math.random()*empty.length)];
-  const val=Math.random()<0.9?2:4;
-  grid[r][c]=val;
-  const id=tileId++;
+  const val=Math.random()<0.9?2:4;grid[r][c]=val;const id=tileId++;
   const el=createTileEl(id,val,r,c,true);
-  tileObjs[id]={value:val,row:r,col:c,el,id};
-  return id;
+  tileObjs[id]={value:val,row:r,col:c,el,id};return id;
 }
 function clearTiles(){tileLayerEl.innerHTML='';tileObjs={};}
-
 function updateStats(){
-  for(const k of['military','economy','culture','faith']){
-    stats[k]=Math.max(0,Math.min(100,stats[k]));
-  }
-  document.getElementById('milBar').style.width=stats.military+'%';
-  document.getElementById('milVal').textContent=stats.military;
-  document.getElementById('ecoBar').style.width=stats.economy+'%';
-  document.getElementById('ecoVal').textContent=stats.economy;
-  document.getElementById('culBar').style.width=stats.culture+'%';
-  document.getElementById('culVal').textContent=stats.culture;
-  document.getElementById('faiBar').style.width=stats.faith+'%';
-  document.getElementById('faiVal').textContent=stats.faith;
+  for(const k of['military','economy','culture','faith'])stats[k]=Math.max(0,Math.min(100,stats[k]));
+  document.getElementById('milBar').style.width=stats.military+'%';document.getElementById('milVal').textContent=stats.military;
+  document.getElementById('ecoBar').style.width=stats.economy+'%';document.getElementById('ecoVal').textContent=stats.economy;
+  document.getElementById('culBar').style.width=stats.culture+'%';document.getElementById('culVal').textContent=stats.culture;
+  document.getElementById('faiBar').style.width=stats.faith+'%';document.getElementById('faiVal').textContent=stats.faith;
 }
-
 function updateEra(){
   let maxTile=2;
   for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(grid[r][c]>maxTile)maxTile=grid[r][c];
   highestTile=maxTile;
-  // Find closest era
   const eraKeys=Object.keys(ERA_NAMES).map(Number).sort((a,b)=>a-b);
-  let era=eraKeys[0];
-  for(const k of eraKeys)if(maxTile>=k)era=k;
+  let era=eraKeys[0];for(const k of eraKeys)if(maxTile>=k)era=k;
   eraLabelEl.textContent=ERA_NAMES[era]||ERA_NAMES[2];
   const yearKeys=Object.keys(YEAR_MAP).map(Number).sort((a,b)=>a-b);
-  let yr=yearKeys[0];
-  for(const k of yearKeys)if(maxTile>=k)yr=k;
+  let yr=yearKeys[0];for(const k of yearKeys)if(maxTile>=k)yr=k;
   yearEl.textContent=YEAR_MAP[yr]||YEAR_MAP[2];
 }
-
 function addLog(msg){
-  const d=document.createElement('div');
-  d.className='log-entry';
-  d.textContent='📜 '+msg;
-  eventLogEl.prepend(d);
-  if(eventLogEl.children.length>20)eventLogEl.removeChild(eventLogEl.lastChild);
+  const d=document.createElement('div');d.className='log-entry';d.textContent='📜 '+msg;
+  eventLogEl.prepend(d);if(eventLogEl.children.length>20)eventLogEl.removeChild(eventLogEl.lastChild);
 }
-
 function updateScore(){
-  scoreEl.textContent=score;
-  scoreEl.parentElement.classList.remove('score-pop');
-  void scoreEl.parentElement.offsetWidth;
-  scoreEl.parentElement.classList.add('score-pop');
+  scoreEl.textContent=score;scoreEl.parentElement.classList.remove('score-pop');
+  void scoreEl.parentElement.offsetWidth;scoreEl.parentElement.classList.add('score-pop');
 }
 
 function checkEvent(maxMergedValue){
-  // Trigger event for the highest newly merged value
-  const eventKeys=Object.keys(EVENTS).map(Number).sort((a,b)=>a-b);
-  for(const k of eventKeys){
-    if(maxMergedValue>=k && !triggeredEvents.has(k)){
+  const keys=Object.keys(EVENTS).map(Number).sort((a,b)=>a-b);
+  for(const k of keys){
+    if(maxMergedValue>=k&&!triggeredEvents.has(k)){
       triggeredEvents.add(k);
-      showEvent(k);
+      const hasEra=!triggeredEras.has(k)&&ERA_DESCS[k];
+      setTimeout(()=>showEvent(k),hasEra?1800:400);
       return;
     }
   }
 }
 
+function checkEraReveal(maxMergedValue){
+  const eraKeys=Object.keys(ERA_DESCS).map(Number).sort((a,b)=>a-b);
+  for(const k of eraKeys){
+    if(maxMergedValue>=k&&!triggeredEras.has(k)){
+      triggeredEras.add(k);showEraReveal(k);boardShake('big');boardFlash('epic');
+      return true;
+    }
+  }
+  return false;
+}
+
 function showEvent(key){
-  moveLocked=true;
-  const ev=EVENTS[key];
+  moveLocked=true;const ev=EVENTS[key];
   let html=`<div class="modal-era">${ERA_NAMES[key]||'A New Age'}</div>`;
   html+=`<div class="modal-title">${ev.title}</div>`;
-  html+=`<div class="modal-desc">${ev.desc}</div>`;
-  html+=`<div class="modal-choices">`;
+  html+=`<div class="modal-desc">${ev.desc}</div><div class="modal-choices">`;
   ev.choices.forEach((ch,i)=>{
-    html+=`<div class="choice-btn" onclick="makeChoice(${key},${i})">`;
-    html+=`<div class="choice-name">${ch.name}</div>`;
-    html+=`<div class="choice-desc">${ch.desc}</div>`;
-    html+=`<div class="choice-effects">`;
-    ch.effectTags.forEach(tag=>{
-      html+=`<span class="effect-tag ${tag.c}">${tag.t}</span>`;
-    });
+    html+=`<div class="choice-btn" onclick="makeChoice(${key},${i})"><div class="choice-name">${ch.name}</div><div class="choice-desc">${ch.desc}</div><div class="choice-effects">`;
+    ch.effectTags.forEach(tag=>{html+=`<span class="effect-tag ${tag.c}">${tag.t}</span>`;});
     html+=`</div></div>`;
   });
-  html+=`</div>`;
-  modalEl.innerHTML=html;
-  modalOverlay.style.display='flex';
+  html+=`</div>`;modalEl.innerHTML=html;modalOverlay.style.display='flex';
 }
 
 window.makeChoice=function(key,idx){
   const ch=EVENTS[key].choices[idx];
-  if(ch.effects.military) stats.military+=ch.effects.military;
-  if(ch.effects.economy) stats.economy+=ch.effects.economy;
-  if(ch.effects.culture) stats.culture+=ch.effects.culture;
-  if(ch.effects.faith) stats.faith+=ch.effects.faith;
-  if(ch.bonus==='score') score+=ch.bonusAmt;
-  updateStats();
-  updateScore();
-  addLog(ch.log);
-  modalOverlay.style.display='none';
-  moveLocked=false;
+  if(ch.effects.military)stats.military+=ch.effects.military;
+  if(ch.effects.economy)stats.economy+=ch.effects.economy;
+  if(ch.effects.culture)stats.culture+=ch.effects.culture;
+  if(ch.effects.faith)stats.faith+=ch.effects.faith;
+  if(ch.bonus==='score')score+=ch.bonusAmt;
+  updateStats();updateScore();addLog(ch.log);
+  modalOverlay.style.display='none';moveLocked=false;
 };
 
 function newGame(){
   grid=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
-  score=0; gameOverFlag=false; wonFlag=false; continueAfterWin=false;
-  prevState=null; highestTile=2;
+  score=0;gameOverFlag=false;wonFlag=false;continueAfterWin=false;
+  prevState=null;highestTile=2;
   stats={military:10,economy:10,culture:10,faith:10};
-  triggeredEvents=new Set(); moveLocked=false;
-  clearTiles();
-  overlayEl.style.display='none';
-  modalOverlay.style.display='none';
-  eventLogEl.innerHTML='';
-  spawnTile(); spawnTile();
-  updateScore(); updateStats(); updateEra();
+  triggeredEvents=new Set();triggeredEras=new Set();moveLocked=false;
+  clearTiles();overlayEl.style.display='none';modalOverlay.style.display='none';
+  eventLogEl.innerHTML='';particleLayerEl.innerHTML='';toastContainer.innerHTML='';
+  spawnTile();spawnTile();updateScore();updateStats();updateEra();
   addLog('A band of settlers makes camp beside a river...');
 }
 
 function saveState(){
-  prevState={
-    grid:grid.map(r=>[...r]), score,
-    stats:{...stats},
-    tileData:Object.values(tileObjs).map(t=>({value:t.value,row:t.row,col:t.col}))
-  };
+  prevState={grid:grid.map(r=>[...r]),score,stats:{...stats},
+    tileData:Object.values(tileObjs).map(t=>({value:t.value,row:t.row,col:t.col}))};
 }
 function undo(){
   if(!prevState||moveLocked)return;
-  grid=prevState.grid; score=prevState.score;
-  stats={...prevState.stats};
-  gameOverFlag=false;
-  overlayEl.style.display='none';
-  clearTiles();
-  for(const td of prevState.tileData){
-    const id=tileId++;
-    const el=createTileEl(id,td.value,td.row,td.col,false);
-    tileObjs[id]={value:td.value,row:td.row,col:td.col,el,id};
-  }
-  prevState=null;
-  updateScore(); updateStats(); updateEra();
+  grid=prevState.grid;score=prevState.score;stats={...prevState.stats};
+  gameOverFlag=false;overlayEl.style.display='none';clearTiles();
+  for(const td of prevState.tileData){const id=tileId++;const el=createTileEl(id,td.value,td.row,td.col,false);tileObjs[id]={value:td.value,row:td.row,col:td.col,el,id};}
+  prevState=null;updateScore();updateStats();updateEra();
 }
 
 function move(dir){
-  if(gameOverFlag||moveLocked)return;
-  saveState();
-  let moved=false, mergedScore=0;
-  const mergedTiles=[], removeTiles=[];
+  if(gameOverFlag||moveLocked)return;saveState();
+  let moved=false,mergedScore=0;
+  const mergedTiles=[],removeTiles=[],mergePositions=[];
   let maxMergedValue=0;
-
-  const tileMap={};
-  for(const t of Object.values(tileObjs)) tileMap[t.row+','+t.col]=t;
-
-  const ranges={
-    up:{rOrder:[0,1,2,3],cOrder:[0,1,2,3],dr:-1,dc:0},
-    down:{rOrder:[3,2,1,0],cOrder:[0,1,2,3],dr:1,dc:0},
-    left:{rOrder:[0,1,2,3],cOrder:[0,1,2,3],dr:0,dc:-1},
-    right:{rOrder:[0,1,2,3],cOrder:[3,2,1,0],dr:0,dc:1},
-  };
+  const tileMap={};for(const t of Object.values(tileObjs))tileMap[t.row+','+t.col]=t;
+  const ranges={up:{rOrder:[0,1,2,3],cOrder:[0,1,2,3],dr:-1,dc:0},down:{rOrder:[3,2,1,0],cOrder:[0,1,2,3],dr:1,dc:0},left:{rOrder:[0,1,2,3],cOrder:[0,1,2,3],dr:0,dc:-1},right:{rOrder:[0,1,2,3],cOrder:[3,2,1,0],dr:0,dc:1}};
   const{rOrder,cOrder,dr,dc}=ranges[dir];
   const merged=Array.from({length:SIZE},()=>Array(SIZE).fill(false));
   const newGrid=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
   const newTileMap={};
-
-  for(const r of rOrder){
-    for(const c of cOrder){
-      if(grid[r][c]===0)continue;
-      const tile=tileMap[r+','+c];
-      let nr=r,nc=c;
-      while(true){
-        const nnr=nr+dr,nnc=nc+dc;
-        if(nnr<0||nnr>=SIZE||nnc<0||nnc>=SIZE)break;
-        if(newGrid[nnr][nnc]===0){nr=nnr;nc=nnc;}
-        else if(newGrid[nnr][nnc]===grid[r][c]&&!merged[nnr][nnc]){nr=nnr;nc=nnc;break;}
-        else break;
-      }
-      if(nr!==r||nc!==c)moved=true;
-      if(newGrid[nr][nc]===grid[r][c]&&newGrid[nr][nc]!==0){
-        const nv=grid[r][c]*2;
-        newGrid[nr][nc]=nv;
-        merged[nr][nc]=true;
-        mergedScore+=nv;
-        if(nv>maxMergedValue)maxMergedValue=nv;
-        const ex=newTileMap[nr+','+nc];
-        if(ex)removeTiles.push(ex);
-        tile.row=nr;tile.col=nc;tile.value=nv;
-        updateTilePos(tile);
-        mergedTiles.push(tile);
-        newTileMap[nr+','+nc]=tile;
-        moved=true;
-      } else {
-        newGrid[nr][nc]=grid[r][c];
-        tile.row=nr;tile.col=nc;
-        updateTilePos(tile);
-        newTileMap[nr+','+nc]=tile;
-      }
-    }
-  }
+  for(const r of rOrder){for(const c of cOrder){
+    if(grid[r][c]===0)continue;const tile=tileMap[r+','+c];let nr=r,nc=c;
+    while(true){const nnr=nr+dr,nnc=nc+dc;if(nnr<0||nnr>=SIZE||nnc<0||nnc>=SIZE)break;if(newGrid[nnr][nnc]===0){nr=nnr;nc=nnc;}else if(newGrid[nnr][nnc]===grid[r][c]&&!merged[nnr][nnc]){nr=nnr;nc=nnc;break;}else break;}
+    if(nr!==r||nc!==c)moved=true;
+    if(newGrid[nr][nc]===grid[r][c]&&newGrid[nr][nc]!==0){
+      const nv=grid[r][c]*2;newGrid[nr][nc]=nv;merged[nr][nc]=true;mergedScore+=nv;
+      if(nv>maxMergedValue)maxMergedValue=nv;
+      const ex=newTileMap[nr+','+nc];if(ex)removeTiles.push(ex);
+      tile.row=nr;tile.col=nc;tile.value=nv;updateTilePos(tile);
+      mergedTiles.push(tile);mergePositions.push({r:nr,c:nc,v:nv});
+      newTileMap[nr+','+nc]=tile;moved=true;
+    }else{newGrid[nr][nc]=grid[r][c];tile.row=nr;tile.col=nc;updateTilePos(tile);newTileMap[nr+','+nc]=tile;}
+  }}
   if(!moved){prevState=null;return;}
-  grid=newGrid;
-  score+=mergedScore;
-
-  // Small stat gains from merging
-  if(mergedScore>0){
-    const gain=Math.floor(mergedScore/20);
-    if(gain>0){
-      stats.economy+=Math.ceil(gain*0.3);
-      stats.culture+=Math.ceil(gain*0.2);
-    }
-  }
+  grid=newGrid;score+=mergedScore;
+  if(mergedScore>0){const gain=Math.floor(mergedScore/20);if(gain>0){stats.economy+=Math.ceil(gain*0.3);stats.culture+=Math.ceil(gain*0.2);}}
 
   setTimeout(()=>{
     for(const t of removeTiles){t.el.remove();delete tileObjs[t.id];}
     for(const t of mergedTiles){
-      t.el.dataset.value=t.value;
-      t.el.querySelector('span').textContent=t.value;
-      // Update tile name
-      const existingName=t.el.querySelector('.tile-name');
-      if(TILE_NAMES[t.value]){
-        if(existingName) existingName.textContent=TILE_NAMES[t.value];
-        else{const nm=document.createElement('div');nm.className='tile-name';nm.textContent=TILE_NAMES[t.value];t.el.appendChild(nm);}
-      } else if(existingName) existingName.remove();
-      const p=getTilePos(t.row,t.col);
-      t.el.style.width=p.size+'px';t.el.style.height=p.size+'px';
-      t.el.classList.add('merged');
-      setTimeout(()=>t.el.classList.remove('merged'),300);
+      t.el.dataset.value=t.value;t.el.querySelector('span').textContent=t.value;
+      const existing=t.el.querySelector('.tile-name');
+      if(TILE_NAMES[t.value]){if(existing)existing.textContent=TILE_NAMES[t.value];else{const nm=document.createElement('div');nm.className='tile-name';nm.textContent=TILE_NAMES[t.value];t.el.appendChild(nm);}}
+      else if(existing)existing.remove();
+      const p=getTilePos(t.row,t.col);t.el.style.width=p.size+'px';t.el.style.height=p.size+'px';
+      t.el.classList.add('merged');setTimeout(()=>t.el.classList.remove('merged'),350);
     }
-    spawnTile();
-    updateScore(); updateStats(); updateEra();
-    // Check events
-    if(maxMergedValue>0) checkEvent(maxMergedValue);
+
+    // ── EFFECTS ──
+    for(const mp of mergePositions){spawnParticles(mp.r,mp.c,mp.v);showMergeToast(mp.r,mp.c,mp.v);}
+    if(maxMergedValue>=32){
+      boardShake(maxMergedValue>=256?'big':'normal');
+      boardFlash(maxMergedValue>=256?'golden':'fire');
+    }
+
+    spawnTile();updateScore();updateStats();updateEra();
+    checkEraReveal(maxMergedValue);
+    if(maxMergedValue>0)checkEvent(maxMergedValue);
     checkGameState();
   },150);
 }
@@ -856,44 +698,30 @@ function move(dir){
 function checkGameState(){
   if(!wonFlag&&!continueAfterWin){
     for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)
-      if(grid[r][c]===2048){wonFlag=true;showOverlay('win');return;}
+      if(grid[r][c]===2048){wonFlag=true;setTimeout(()=>showOverlay('win'),3400);return;}
   }
   for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(grid[r][c]===0)return;
   for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){
     if(c<SIZE-1&&grid[r][c]===grid[r][c+1])return;
     if(r<SIZE-1&&grid[r][c]===grid[r+1][c])return;
   }
-  gameOverFlag=true;
-  showOverlay('gameover');
+  gameOverFlag=true;showOverlay('gameover');
 }
 
 function showOverlay(type){
   overlayEl.style.display='flex';
-  // Summary of empire
-  const summary = `⚔️${stats.military} 🪙${stats.economy} 🏛️${stats.culture} ✨${stats.faith}`;
+  const summary=`⚔️${stats.military} 🪙${stats.economy} 🏛️${stats.culture} ✨${stats.faith}`;
   if(type==='win'){
-    overlayEl.innerHTML=`
-      <h2 class="win-text">Eternal Empire!</h2>
-      <p>Score: ${score} · ${summary}</p>
-      <button class="btn" onclick="continueGame()">Keep Expanding</button>
-      <button class="btn" onclick="newGame()">New Empire</button>`;
-  } else {
-    // Determine how empire fell based on lowest stat
-    const entries=Object.entries(stats);
-    entries.sort((a,b)=>a[1]-b[1]);
-    const weakest=entries[0][0];
+    overlayEl.innerHTML=`<h2 class="win-text">Eternal Empire!</h2><p>Score: ${score} · ${summary}</p><button class="btn" onclick="continueGame()">Keep Expanding</button><button class="btn" onclick="newGame()">New Empire</button>`;
+  }else{
+    const entries=Object.entries(stats);entries.sort((a,b)=>a[1]-b[1]);
     const reasons={military:'conquered by invaders',economy:'bankrupted by debt',culture:'forgotten by history',faith:'torn apart by internal strife'};
-    overlayEl.innerHTML=`
-      <h2 class="go-text">Empire Fallen</h2>
-      <p>Your empire was ${reasons[weakest]}.</p>
-      <p>Score: ${score} · ${summary}</p>
-      <button class="btn" onclick="newGame()">Rise Again</button>
-      <button class="btn" onclick="undo()">Undo</button>`;
+    overlayEl.innerHTML=`<h2 class="go-text">Empire Fallen</h2><p>Your empire was ${reasons[entries[0][0]]}.</p><p>Score: ${score} · ${summary}</p><button class="btn" onclick="newGame()">Rise Again</button><button class="btn" onclick="undo()">Undo</button>`;
   }
 }
 function continueGame(){continueAfterWin=true;overlayEl.style.display='none';}
 
-// ─── INPUT ───
+// INPUT
 document.addEventListener('keydown',e=>{
   const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};
   if(map[e.key]){e.preventDefault();move(map[e.key]);}
@@ -901,14 +729,10 @@ document.addEventListener('keydown',e=>{
 let tx,ty;
 document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
 document.addEventListener('touchend',e=>{
-  if(tx==null)return;
-  const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(tx==null)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
   if(Math.max(Math.abs(dx),Math.abs(dy))<30)return;
-  if(Math.abs(dx)>Math.abs(dy))move(dx>0?'right':'left');
-  else move(dy>0?'down':'up');
-  tx=null;
+  if(Math.abs(dx)>Math.abs(dy))move(dx>0?'right':'left');else move(dy>0?'down':'up');tx=null;
 },{passive:true});
-
 window.addEventListener('resize',()=>{for(const t of Object.values(tileObjs))updateTilePos(t);});
 
 newGame();
